@@ -1,5 +1,7 @@
 package com.Colin.linkedlist;
 
+import java.util.Stack;
+
 public class SingleLinkedListDemo {
     public static void main(String[] args) {
         // 创建节点
@@ -24,6 +26,17 @@ public class SingleLinkedListDemo {
         System.out.println("添加数据后的链表：");
         singleLinkedList.list();
 
+        // 逆序打印链表
+        System.out.println("逆序打印链表");
+        singleLinkedList.reversePrint(singleLinkedList.getHead());
+        singleLinkedList.list();
+
+
+        // 反转链表
+        System.out.println("反转链表：");
+        singleLinkedList.reverseList(singleLinkedList.getHead());
+        singleLinkedList.list();
+
         // 修改节点
         HeroNode newHeroNode = new HeroNode(2,"小卢","玉麒麟~");
         singleLinkedList.update(newHeroNode);
@@ -39,6 +52,13 @@ public class SingleLinkedListDemo {
         singleLinkedList.deleteHero(4);
         System.out.println("删除数据后的链表：");
         singleLinkedList.list();
+
+        System.out.println("有效的节点数量："+singleLinkedList.getLength(singleLinkedList.getHead()));
+
+        // 查找倒数第k个节点
+        System.out.println("倒数第2个节点：\n"+ singleLinkedList.findLastKNode(singleLinkedList.getHead(),2));
+
+
 
 
 
@@ -70,6 +90,11 @@ class HeroNode {
 class SingleLinkedList {
     // 初始化一个头节点，不存放具体数据
     private HeroNode head = new HeroNode(0,"","");
+
+    // 返回头节点
+    public HeroNode getHead() {
+        return head;
+    }
 
     // 添加节点到单向链表
     // 当不考虑标号顺序时
@@ -193,4 +218,96 @@ class SingleLinkedList {
         }
 
     }
+
+    // 获取单链表中的节点的个数（不计算头节点）
+    public static int getLength(HeroNode head) {
+        if(head.next == null) {
+            return 0;
+        }
+        int length = 0;
+        HeroNode cur = head.next;
+        while(cur != null) {
+            length++;
+            cur = cur.next;
+        }
+        return length;
+    }
+
+    // 查找单链表中的倒数第k个节点
+    // 1. 编写一个方法，接受head节点，同时接受一个index
+    // 2. index 表示是倒数第index个节点
+    // 3. 先把链表从头到尾遍历，得到链表的总长度getLength
+    // 4. 得到size后，我们从链表的第一个开始遍历(size - index)个，就可以得到
+    public static HeroNode findLastKNode(HeroNode head, int index) {
+        if(head.next == null) {
+            return  null; // 没有找到
+        }
+        // 第一次遍历得到链表的长度
+        int size = getLength(head);
+        // 第二次遍历 size-index的位置
+        if(index <= 0 || index > size) {
+            return null;
+        }
+        HeroNode cur = head.next;
+        for(int i = 0; i < size - index; i++) {
+            cur = cur.next;
+        }
+        return cur;
+
+    }
+    // 将单链表反转
+    public static HeroNode reverseList(HeroNode head) {
+        if(head.next == null || head.next.next == null) {
+            return head;
+        }
+        // 定义辅助指针
+        HeroNode cur = head.next;
+        HeroNode next = null; // 当前节点的下一个节点
+        HeroNode reverseHead = new HeroNode(0," "," ");
+
+        while(cur != null) {
+            next = cur.next;
+            cur.next = reverseHead.next; // 将cur的下一个节点指向新链表的最前端
+            reverseHead.next = cur; // 将cur连接到新的链表上
+            cur = next; // 让cur后移
+        }
+        // 将head.next 指向reverseHead.next
+        head.next = reverseHead.next;
+        return reverseHead;
+    }
+
+    // 逆序打印单链表
+    public static void reversePrint(HeroNode head) {
+        if(head.next == null) {
+            return; // 空链表
+        }
+        // 创建一个栈，将各个节点压入栈
+        Stack<HeroNode> stack = new Stack<HeroNode>();
+        HeroNode cur = head.next;
+
+        while(cur != null) {
+            stack.push(cur);
+            cur = cur.next;
+        }
+        // 将栈中的节点进行打印
+        while(stack.size() > 0) {
+            System.out.println(stack.pop());
+        }
+    }
+
+    // 合并两个有序链表
+    public static HeroNode mergeLinkedList(HeroNode head1, HeroNode head2) {
+        if(head1.next == null) {
+            return head2;
+        }
+        else if(head2.next == null) {
+            return head1;
+        }
+        HeroNode mergeList = new HeroNode(0,"","");
+        
+
+        return mergeList;
+    }
+
 }
+
